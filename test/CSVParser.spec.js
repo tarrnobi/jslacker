@@ -11,16 +11,16 @@ describe('CSVParser', () =>{
   describe('CSVParser/fromCSV()',() =>{
     it('returns an error message if file does not exist', () =>{
       const expectedResults = 'Error: File not exists'
-      expect(CSVParser.fromCSV('non-existant-file.csv')).to.eventually.be.rejectedWith(expectedResults);
+      return expect(CSVParser.fromCSV('non-existant-file.csv')).to.eventually.be.rejectedWith(expectedResults);
     });
     it('loads the file given a path', ()=>{
       const expectedResults = [{Year:'1986', Age:'0'}];
-      expect(CSVParser.fromCSV('dummy.csv')).to.eventually.deep.equal(expectedResults);
+      return expect(CSVParser.fromCSV('dummy.csv')).to.eventually.deep.equal(expectedResults);
     });
   });
   describe('CSVParser/prepareAllCSVFiles()', () =>{
-    it('returns an object with a function call for all csv artefacts', () =>{});
-     it('returns json data from the leap_years function when called', ()=>{
+    it('returns an object with a function call for all csv artefacts');
+    it('returns json data from the leap_years function when called', ()=>{
       const expectedResults = [
         {Year: '1988', Age:'2'},
         {Year: '1992', Age:'6'},
