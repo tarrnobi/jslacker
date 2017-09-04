@@ -8,12 +8,19 @@ import {templater} from '../lib/jslacker'
 
 describe('templater', ()=>{
   describe('templater/prepareAllSQLTemplates()', ()=>{
-    it('returns an object with a property for each template in ./artefacts/templates');
+    it('returns an object with a property for each template in ./artefacts/templates', () =>{
+      const templates = templater.prepareAllSQLTemplates();
+      return expect(templates).to.have.property('MyAgeIs');
+    });
     it('returns the template file data when no parameters are passed', () =>{
       const expectedResults = "SELECT Msg = 'My Age Is: ' + '$(MyAge)';";
       const templates = templater.prepareAllSQLTemplates();
-      expect(templates.MyAgeIs()).to.eventually.equal(expectedResults);
+      return expect(templates.MyAgeIs()).to.eventually.include(expectedResults);
     });
-    it('returns the parameterized template when loaded with values')
+    it('returns the parameterized template when loaded with values', () =>{
+      const expectedResults = "SELECT Msg = 'My Age Is: ' + '30';";
+      const templates = templater.prepareAllSQLTemplates();
+      return expect(templates.MyAgeIs({MyAge:'30'})).to.eventually.include(expectedResults);
+    })
   });
 });
