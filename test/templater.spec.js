@@ -3,7 +3,6 @@ var chaiAsPromised = require("chai-as-promised");
 chai.use(chaiAsPromised);
 
 var expect = chai.expect;
-
 import {templater} from '../lib/jslacker'
 
 describe('templater', ()=>{
