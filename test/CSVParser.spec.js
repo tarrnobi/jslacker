@@ -19,7 +19,10 @@ describe('CSVParser', () =>{
     });
   });
   describe('CSVParser/prepareAllCSVFiles()', () =>{
-    it('returns an object with a function call for all csv artefacts');
+    it('returns an object with a function call for all csv artefacts', () =>{
+      const csv = CSVParser.prepareAllCSVFiles();
+      return expect(csv).to.have.property('leap_years');
+    });
     it('returns json data from the leap_years function when called', ()=>{
       const expectedResults = [
         {Year: '1988', Age:'2'},
@@ -32,7 +35,7 @@ describe('CSVParser', () =>{
         {Year: '2016', Age:'30'}
       ]
       const csv = CSVParser.prepareAllCSVFiles();
-      expect(csv.leap_years()).to.eventually.deep.equal(expectedResults);
+      return expect(csv.leap_years()).to.eventually.deep.equal(expectedResults);
     });
   });
 })

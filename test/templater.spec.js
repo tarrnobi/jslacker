@@ -16,10 +16,17 @@ describe('templater', ()=>{
       const templates = templater.prepareAllSQLTemplates();
       return expect(templates.MyAgeIs()).to.eventually.include(expectedResults);
     });
-    it('returns the parameterized template when loaded with values', () =>{
+    it('returns the parameterised template when loaded with values', () =>{
       const expectedResults = "SELECT Msg = 'My Age Is: ' + '30';";
       const templates = templater.prepareAllSQLTemplates();
       return expect(templates.MyAgeIs({MyAge:'30'})).to.eventually.include(expectedResults);
     })
+  });
+  describe('templater/parameterise', () =>{
+    it('returns the parameterised template when loaded with values', () =>{
+      const input           = "SELECT Msg = 'My Age Is: ' + '$(MyAge)';"
+      const expectedResults = "SELECT Msg = 'My Age Is: ' + '30';";
+      return expect(templater.parameterise(input, {MyAge: '30'})).to.include(expectedResults);
+    });
   });
 });
