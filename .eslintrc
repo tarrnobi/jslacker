@@ -2,5 +2,9 @@
   "extends": "airbnb",
   "env": {
     "mocha": true
-  }
+  },
+  "parserOptions": {
+        "ecmaVersion": 2017,
+        "sourceType": "module"
+    }
 }

@@ -10,6 +10,32 @@ const sql = require('mssql');
 // const dotenv = require('dotenv');
 
 describe('SQLConnectors', () => {
+  describe('SQLConnectors/closeConnection', () => {
+    it('closes an open connection', async () => {
+      await SQLConnector.connectionPool.connect();
+      await SQLConnector.closeConnection();
+      return expect(SQLConnector.connectionPool.connected).to.be.false;
+    });
+    it('does not fail when a connection is already closed', async () => {
+      await SQLConnector.closeConnection();
+      return expect(SQLConnector.connectionPool.connected).to.be.false;
+    });
+  });
+  describe('SQLConnectors/openConnection', () => {
+    it('opens a connection when commanded to', async () => {
+      await SQLConnector.openConnection();
+      const connectionState = SQLConnector.connectionPool.connected;
+      await SQLConnector.connectionPool.close();
+      return expect(connectionState).to.be.true;
+    });
+    it('does not fail when a connection is already opened', async () => {
+      await SQLConnector.openConnection();
+      await SQLConnector.openConnection();
+      const connectionState = SQLConnector.connectionPool.connected;
+      await SQLConnector.connectionPool.close();
+      return expect(connectionState).to.be.true;
+    });
+  });
   describe('SQLConnects/query()', () => {
     it('returns a recordset when a simple query is executed', () => {
       const sqlQuery = "SELECT Msg = 'Hello World';";
@@ -41,7 +67,12 @@ describe('SQLConnectors', () => {
       return expect(SQLConnector.query(sqlQuery, parameters)).to.eventually.be.rejectedWith(expectedResults);
     });
   });
-
+  // it('shows async functions working', async () => {
+  //   const sqlQuery = "SELECT Msg = 'Hello World';";
+  //   const expectedResults = [{ Msg: 'Hello World' }];
+  //   const results = await SQLConnector.query2(sqlQuery);
+  //   expect(results).to.deep.equal(expectedResults);
+  // });
   // it('Can return SQL and compare to a CSV', ()=>{
   //   var fileData = CSVParser.fromCSV("dummy.csv");
   //   var queryData = SQLConnector.dummyQuery();

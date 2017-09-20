@@ -36,6 +36,8 @@
     "mssql": "^4.0.4"
   },
   "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-es2017": "^6.24.1",
     "chai": "^4.0.0",
     "eslint": "^4.3.0",
     "eslint-config-airbnb": "^15.1.0",
