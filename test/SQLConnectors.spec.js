@@ -36,7 +36,29 @@ describe('SQLConnectors', () => {
       return expect(connectionState).to.be.true;
     });
   });
-  describe('SQLConnects/query()', () => {
+  describe('SQLConnectors/Transactions', () => {
+    before(async () => {
+      await SQLConnector.openConnection();
+    });
+    after(async () => {
+      await SQLConnector.closeConnection();
+    });
+    it('should not start in a transaction', async () => {
+      const isInTransaction = SQLConnector.isInTransaction();
+      return expect(isInTransaction).to.be.false;
+    });
+    it('opens a transaction when called', async () => {
+      await SQLConnector.beginTransaction();
+      const isInTransaction = SQLConnector.isInTransaction();
+      return expect(isInTransaction).to.be.true;
+    });
+    it('rolls back a transaction when called', async () => {
+      await SQLConnector.rollbackTransaction();
+      const isInTransaction = SQLConnector.isInTransaction();
+      return expect(isInTransaction).to.be.false;
+    });
+  });
+  describe('SQLConnectors/query()', () => {
     it('returns a recordset when a simple query is executed', () => {
       const sqlQuery = "SELECT Msg = 'Hello World';";
       const expectedResults = [{ Msg: 'Hello World' }];
