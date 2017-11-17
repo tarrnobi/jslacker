@@ -2,7 +2,7 @@
   "name": "jslacker",
   "version": "1.0.0",
   "description": "JS Implementation of SQL Server Unit Testing",
-  "main": "setup.js",
+  "main": "./index.js",
   "scripts": {
     "setup": "node setup.js",
     "test": "mocha test/*.spec.js"
