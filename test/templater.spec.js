@@ -22,6 +22,11 @@ describe('templater', () => {
       const templates = templater.prepareAllSQLTemplates();
       return expect(templates.MyAgeIs({ MyAge: '30' })).to.eventually.include(expectedResults);
     });
+    it('returns the parameterised template when loaded with multiple values', () => {
+      const expectedResults = "SELECT Msg = 'My Name Is: Brendan, My Age Is: 30'";
+      const templates = templater.prepareAllSQLTemplates();
+      return expect(templates.MyNameAndAgeIs({ MyName: 'Brendan', MyAge: 30 })).to.eventually.include(expectedResults);
+    });
   });
   describe('templater/parameterise', () => {
     it('returns the parameterised template when loaded with values', () => {
