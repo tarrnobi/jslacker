@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/tarrnobi/jslacker.svg?branch=master)](https://travis-ci.org/tarrnobi/jslacker)
+
 # JSlacker
 JS Implementation of Slacker Unit Tests for SQL Server (Ruby).
 
