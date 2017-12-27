@@ -2,12 +2,13 @@ import { SQLConnector } from '../lib/jslacker';
 
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
+const sql = require('mssql');
+const xpath = require('xpath');
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
 
-const sql = require('mssql');
-// const dotenv = require('dotenv');
+const ResponseType = SQLConnector.ResponseType;
 
 describe('SQLConnectors', () => {
   describe('SQLConnectors/closeConnection', () => {
@@ -58,6 +59,34 @@ describe('SQLConnectors', () => {
       return expect(isInTransaction).to.be.false;
     });
   });
+  describe('SQLConnectors/prepareResponse', () => {
+    it('returns a standard recordset when no ResponseType supplied', () => {
+      const response = {
+        recordset: [{ name: 'Brendan', age: 25 }],
+      };
+      const expectedResults = [{ name: 'Brendan', age: 25 }];
+      return expect(SQLConnector.prepareResponseType(response, null))
+        .to.deep.equal(expectedResults);
+    });
+    it('returns an XMLDOM Object when XML ResponseType is supplied', () => {
+      const xmlString = '<Results><Person Name="Brendan" Age="25" /></Results>';
+      const response = {
+        recordset: [{ xml_query: xmlString }],
+      };
+
+      const results = SQLConnector.prepareResponseType(response, ResponseType.XML);
+      const node = xpath.select('/Results/Person[1]/@Name', results)[0].value;
+      return expect(node).to.equal('Brendan');
+    });
+    it('returns a standard recordset when explicitly defined', () => {
+      const response = {
+        recordset: [{ name: 'Brendan', age: 25 }],
+      };
+      const expectedResults = [{ name: 'Brendan', age: 25 }];
+      return expect(SQLConnector.prepareResponseType(response, ResponseType.RECORDSET))
+        .to.deep.equal(expectedResults);
+    });
+  });
   describe('SQLConnectors/query()', () => {
     it('returns a recordset when a simple query is executed', () => {
       const sqlQuery = "SELECT Msg = 'Hello World';";
@@ -78,7 +107,8 @@ describe('SQLConnectors', () => {
         { name: 'Priority', type: sql.Int, value: 1 },
       ];
       const expectedResults = [{ Msg: 'Hello', Name: 'Brendan', Priority: 1 }];
-      return expect(SQLConnector.query(sqlQuery, parameters)).to.eventually.deep.equal(expectedResults);
+      return expect(SQLConnector.query(sqlQuery, parameters))
+        .to.eventually.deep.equal(expectedResults);
     });
     it('returns an error when a parameter is missing from the query', () => {
       const sqlQuery = 'SELECT Msg = @Msg, Name = @Name';
@@ -86,7 +116,8 @@ describe('SQLConnectors', () => {
         { name: 'Msg', type: sql.VarChar(50), value: 'Hello' },
       ];
       const expectedResults = 'Must declare the scalar variable "@Name"';
-      return expect(SQLConnector.query(sqlQuery, parameters)).to.eventually.be.rejectedWith(expectedResults);
+      return expect(SQLConnector.query(sqlQuery, parameters))
+        .to.eventually.be.rejectedWith(expectedResults);
     });
   });
   // it('shows async functions working', async () => {

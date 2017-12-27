@@ -33,7 +33,9 @@
     "chai-as-promised": "^7.1.1",
     "csvtojson": "^1.1.7",
     "dotenv": "^4.0.0",
-    "mssql": "^4.0.4"
+    "mssql": "^4.0.4",
+    "xmldom": "^0.1.27",
+    "xpath": "0.0.27"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
