@@ -10,7 +10,7 @@ const expect = chai.expect;
 describe('CSVParser', () => {
   describe('CSVParser/fromCSV()', () => {
     it('returns an error message if file does not exist', async () => {
-      const expectedResults = [{ errorMessage: 'Error: File not exists' }];
+      const expectedResults = [{ errorMessage: 'Error: File does not exist. Check to make sure the file path to your csv is correct.' }];
       const results = await CSVParser.fromCSV('non-existant-file.csv');
       expect(results).to.deep.equal(expectedResults);
     });
